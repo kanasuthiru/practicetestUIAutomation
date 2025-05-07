@@ -40,8 +40,6 @@ class shipping_address(basePage):
         assert "Address changed successfully." == self.get_element(locator_type="xpath",locator_value="//div[@class='woocommerce-message']",wait_action="visibility").text.strip()
         my_account(self.driver).click_on_address_link_from_my_account_menu()
         saved_address = self.get_element(locator_value="//h3[text()='Shipping Address']/../../address",locator_type="xpath").text
-        print(saved_address == convert_dictionary_values_to_string(address_dict))
-        print(convert_dictionary_values_to_string(address_dict))
         assert saved_address == convert_dictionary_values_to_string(address_dict)
      
 
@@ -97,8 +95,6 @@ class shipping_address(basePage):
             if address_2=="random":
                 address_2="some_new address"
             self.send_text(text=address_2, locator_value="shipping_address_2", locator_type="id")
-            print(self.get_attribute_value(attribute_name="value", locator_value="shipping_address_2", locator_type="id").strip(),"......",address_2,"..............")
-            print(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
             assert self.get_attribute_value(attribute_name="value", locator_value="shipping_address_2", locator_type="id").strip()==address_2.strip()
         self.after_edit_shipping_address['address_2'] = address_2
 
@@ -115,8 +111,6 @@ class shipping_address(basePage):
 
     def select_shipping_state_or_county_from_the_dropdown(self,state_name):
         state_name_text=self.get_element(locator_value="select2-chosen-2",locator_type="id").text
-        print(state_name_text)
-        print(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
         self.after_edit_shipping_address['state'] = state_name_text
         
 
@@ -125,21 +119,16 @@ class shipping_address(basePage):
         if pincode is not None:
             if pincode=="random":
                 pincode=random.randint(111111,999999)
-                print(pincode)
+
             self.send_text(text=pincode, locator_value="shipping_postcode", locator_type="id")
-            print(self.get_attribute_value(attribute_name="value", locator_value="shipping_postcode", locator_type="id"),pincode)
             assert self.get_attribute_value(attribute_name="value", locator_value="shipping_postcode", locator_type="id").strip()==f"{pincode}".strip()
         self.after_edit_shipping_address['pincode'] = pincode
-        print(self.after_edit_shipping_address)
-        print("asdfghjkwertyuiosdfghjk.................................................")
 
 
     def is_shipping_first_name_field_visible(self):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_first_name_field", locatorType="id")
         f_name = self.get_attribute_value(attribute_name="value", locator_value="shipping_first_name", locator_type="id")
         self.before_edit_shipping_address['f_name'] = f_name
-        print("First Name", self.get_element(locator_value="//p[@id='shipping_first_name_field']/label",
-                                             locator_type="xpath").text.strip())
         assert "First Name *" == self.get_element(locator_value="//p[@id='shipping_first_name_field']/label",
                                                   locator_type="xpath").text.strip()
 
@@ -147,8 +136,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_last_name_field", locatorType="id")
         l_name = self.get_attribute_value(attribute_name="value", locator_value="shipping_last_name", locator_type="id")
         self.before_edit_shipping_address['l_name'] = l_name
-        print("Last Name", self.get_element(locator_value="//p[@id='shipping_last_name_field']/label",
-                                            locator_type="xpath").text.strip())
         assert "Last Name *" == self.get_element(locator_value="//p[@id='shipping_last_name_field']/label",
                                                  locator_type="xpath").text.strip()
         
@@ -161,7 +148,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_company_field",locatorType="id")
         c_name=self.get_attribute_value(attribute_name="value",locator_value="shipping_company",locator_type="id")
         self.before_edit_shipping_address['c_name']=c_name
-        print("Company Name",self.get_element(locator_value="//p[@id='shipping_company_field']/label",locator_type="xpath").text.strip())
         assert "Company Name"==self.get_element(locator_value="//p[@id='shipping_company_field']/label",locator_type="xpath").text.strip()
         
         
@@ -170,7 +156,6 @@ class shipping_address(basePage):
         selected_country = self.get_attribute_value(attribute_name="value", locator_value="select2-chosen-1",
                                                   locator_type="id")
         self.before_edit_shipping_address["country"] = selected_country
-        print("Country *",self.get_element(locator_value="//p[@id='shipping_country_field']/label",locator_type="xpath").text.strip())
         assert "Country *"==self.get_element(locator_value="//p[@id='shipping_country_field']/label",locator_type="xpath").text.strip()
  
 
@@ -178,7 +163,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_address_1_field",locatorType="id")
         address=self.get_attribute_value(attribute_name="value",locator_value="shipping_address_1",locator_type="id")
         self.before_edit_shipping_address['street_address']=address
-        print("Address",self.get_element(locator_value="//p[@id='shipping_address_1_field']/label",locator_type="xpath").text.strip())
         assert "Address *"==self.get_element(locator_value="//p[@id='shipping_address_1_field']/label",locator_type="xpath").text.strip()
 
 
@@ -186,7 +170,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_address_2_field",locatorType="id")
         optional_address=self.get_attribute_value(attribute_name="value",locator_value="shipping_address_2",locator_type="id")
         self.before_edit_shipping_address["address_2"]=optional_address
-        print(optional_address)
 
 
 
@@ -194,7 +177,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_city_field",locatorType="id")
         city=self.get_attribute_value(attribute_name="value",locator_value="shipping_city",locator_type="id")
         self.before_edit_shipping_address["city"]=city
-        print("Town / City",self.get_element(locator_value="//p[@id='shipping_city_field']/label",locator_type="xpath").text.strip())
         assert "Town / City *"==self.get_element(locator_value="//p[@id='shipping_city_field']/label",locator_type="xpath").text.strip()
 
 
@@ -203,7 +185,6 @@ class shipping_address(basePage):
         selected_state=self.get_attribute_value(attribute_name="value",locator_value="select2-chosen-2",locator_type="id")
 
         self.before_edit_shipping_address["state"]=selected_state
-        print("State / County",self.get_element(locator_value="//p[@id='shipping_state_field']/label",locator_type="xpath").text.strip())
         assert "State / County *"==self.get_element(locator_value="//p[@id='shipping_state_field']/label",locator_type="xpath").text.strip()
 
 
@@ -211,7 +192,6 @@ class shipping_address(basePage):
         self.check_for_ele_displayed_or_not_displayed(locatorValue="shipping_postcode_field",locatorType="id")
         input_text=self.get_attribute_value(attribute_name="value",locator_value="shipping_postcode",locator_type="id")
         self.before_edit_shipping_address["pincode"]=input_text
-        print("Postcode / ZIP",self.get_element(locator_value="//p[@id='shipping_postcode_field']/label",locator_type="xpath").text.strip())
         assert "Postcode / ZIP *"==self.get_element(locator_value="//p[@id='shipping_postcode_field']/label",locator_type="xpath").text.strip()
 
 
@@ -233,8 +213,6 @@ class shipping_address(basePage):
         self.select_shipping_state_or_county_from_the_dropdown(address_dict.get('state'))
         self.enter_shipping_pincode(address_dict.get('pincode'))
         fields_not_filled=[field for field, value in self.after_edit_shipping_address.items() if value is None]
-        print(fields_not_filled)
-        print("dfghjk........................")
         current_url_page=self.driver.current_url
         self.click_on_save_address_button()
         if fields_not_filled:
@@ -257,8 +235,5 @@ class shipping_address(basePage):
 
         error_eles=self.getAllElements(locatorValue="//ul[@class='woocommerce-error']/li",locator_type="xpath")
         for index ,error_msg in enumerate(error_eles):
-            print(error_msg.text)
-            print("..........................")
             if expected_fields[index] in text_mapping.keys():
-                print(f"{text_mapping[expected_fields[index]]} is a required field.")
                 assert error_msg.text==f"{text_mapping[expected_fields[index]]} is a required field."

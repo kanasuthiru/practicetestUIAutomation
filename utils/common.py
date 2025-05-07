@@ -31,7 +31,6 @@ def generate_random_password_for_register(length=14,use_lower_case=True,use_uppe
 def get_username_if_email(text):
     # Simple email pattern
     email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-    print(email_pattern)
     if re.match(email_pattern, text):
         return text.split('@')[0]
     else:
@@ -57,7 +56,6 @@ def get_reason_and_ui_input_warningmessage_or_warning_message_flag(context):
 
 
 def get_login_failure_reason(context,reason,component="login"):
-    print(component)
     if reason=="non_registered_username" and re.match(r"[^@]+@[^@]+\.[^@]+", context.username):
         reason="non_registered_mail_id"
 
@@ -83,9 +81,7 @@ def get_login_failure_reason(context,reason,component="login"):
 
     }
     if component!="login":
-        print("register............")
         return register_reason_dict.get(reason,None)
-    print("login_dict")
     return login_reason_dict.get(reason, None)
 
 def convert_dictionary_values_to_string(address_dict):

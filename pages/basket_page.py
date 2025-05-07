@@ -12,21 +12,15 @@ class cart(basePage):
         self.driver = driver
 
     def remove_product_from_basket_using_remove_this_item(self,removal_product_name_list):
-        print(len(removal_product_name_list))
         bef_product_name_list,bef_product_present_in_basket_dict=self.get_added_product_present_in_baseket()
         cart_item_row_elements=self.getAllElements(locatorValue="//table[contains(@class,'responsive cart')]/tbody/tr[@class='cart_item']",locator_type="xpath")
         for index,cart_item_column_ele in enumerate(cart_item_row_elements):
             for name in removal_product_name_list:
-                print(name)
-                print(self.get_element_with_in_element(element=cart_item_column_ele,locator_value="//td[@class='product-name']/a",locator_type="xpath").text)
-                print("dfghjertyu")
                 if name==self.get_element_with_in_element(element=cart_item_column_ele,locator_value="//td[@class='product-name']/a",locator_type="xpath").text:
                     self.get_element_with_in_element(element=cart_item_column_ele,locator_value="//td[@class='product-remove']/a",locator_type="xpath").click()
                     self.check_for_ele_displayed_or_not_displayed(locatorValue="//div[@class='blockUI']",locatorType="xpath",status_flag=False)
                     product_name_list,cart_item_dict=self.get_added_product_present_in_baseket()
-                    print(product_name_list)
                     assert name not in product_name_list
-                    sleep(10)
                     return bef_product_name_list,bef_product_present_in_basket_dict
         return bef_product_name_list,bef_product_present_in_basket_dict
 
@@ -113,8 +107,6 @@ class cart(basePage):
         assert product_details[product_name]['name']==product_details_in_basket[product_name]['name']
         if product_details[product_name]['sale']:
             assert product_details[product_name]['selling_price']==product_details_in_basket[product_name]['selling_price']
-            print(f"₹{((float(product_details[product_name]['original_price'].replace('₹', ''))) * added_quantity) :.2f}")
-            print(product_details_in_basket[product_name]['item_total'])
             assert f"₹{(float(product_details[product_name]['selling_price'].replace('₹', '')) * added_quantity):.2f}"==product_details_in_basket[product_name]['item_total']
 
         else:

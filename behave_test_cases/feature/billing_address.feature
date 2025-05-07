@@ -1,4 +1,5 @@
 Feature: Edit billing address
+  @positive
   Scenario Outline: validate user is able to add new billing address
     Given user is on home screen page
     When  register a new user account
@@ -8,7 +9,7 @@ Feature: Edit billing address
       | fields_and_value |
     |     {'f_name': 'random', 'l_name': 'random', 'c_name': 'random', 'email_address': 'random', 'phone_number': 'random', 'country': 'random', 'street_address': 'random', 'address_2': 'random', 'city': 'random', 'state': "random", 'pincode': 'random'}]   |
 
-
+  @positive
   Scenario Outline: validate user is able to add edit existing billing address
     Given user is on home screen page
     When login with existing user
@@ -19,8 +20,7 @@ Feature: Edit billing address
      |  {'f_name': 'random', 'l_name': 'random', 'c_name': 'random', 'email_address': 'random', 'phone_number': 'random', 'country': 'random', 'street_address': 'random', 'address_2': 'random', 'city': 'random', 'state': "random", 'pincode': 'random'}   |
 
 
-
-
+  @negative
   Scenario Outline: validate billing address should not allowed to  save without filling mandatory fields
     Given user is on home screen page
     When register a new user account
@@ -36,7 +36,7 @@ Feature: Edit billing address
 
 
 
-
+  @negative
   Scenario Outline: validate user should not be allowed to save billing address
     Given user is on home screen page
     When register a new user account

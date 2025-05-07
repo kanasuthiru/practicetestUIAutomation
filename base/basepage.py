@@ -86,9 +86,6 @@ class basePage:
 
     def attribute_to_be_changed(self, locatorValue, locatorType, attribute_name,old_attribute_value,required_text=None):
         attribute_value=self.get_attribute_value(attribute_name=attribute_name,locator_type=locatorType,locator_value=locatorValue)
-        print(old_attribute_value)
-        print(attribute_value)
-        print(attribute_value!=old_attribute_value)
         if required_text is not None:
             return attribute_value==required_text
         return attribute_value!=old_attribute_value
@@ -117,14 +114,11 @@ class basePage:
         status = True
         if not status_flag:
             eles = self.getAllElements(locatorValue=locatorValue,locator_type=locatorType)
-            print(len(eles))
-            print("sdfghjkltyuio")
             if len(eles) == 0:
                 status = False
         else:
             element = self.get_element(locator_value=locatorValue, locator_type=locatorType, timeout=timeout, wait_action="visibility")
             status = element.is_displayed()
-        print(status,status_flag)
         return status == status_flag
 
     def get_element_with_in_element(self,element, locator_value, locator_type,multiple_elements=False):

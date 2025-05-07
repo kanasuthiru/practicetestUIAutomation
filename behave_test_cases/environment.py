@@ -3,8 +3,13 @@ from behave.model_core import Status
 from selenium import webdriver
 
 from base.basepage import basePage
+from conftest import shop_page
+from pages.basket_page import cart
+from pages.billing_address_page import billing_address
 from pages.home_page import home_page
 from pages.myAccount_page import my_account
+from pages.shipping_address_page import shipping_address
+from pages.shop_page import shop
 
 
 def before_all(context):
@@ -13,15 +18,13 @@ def before_all(context):
 
 
 def before_scenario(context,scenario):
-    print("dfghjkl")
-    print(scenario.name)
-    print(scenario.status,Status.passed)
-    print("hjklhghioiuy")
-    print("......................................")
-    print("sdfghjkl")
     context.bp=basePage(context.driver)
     context.hp=home_page(context.driver)
     context.myAcc=my_account(context.driver)
+    context.ship=shipping_address(context.driver)
+    context.bill=billing_address(context.driver)
+    context.shop=shop(context.driver)
+    context.cart=cart(context.driver)
     context.username=None
     context.email_address=None
 
@@ -32,8 +35,7 @@ def after_scenario(context, scenario):
                               wait_action="visibility").is_displayed():
             context.myAcc.click_on_sign_out_link()
             context.myAcc.verify_user_is_on_login_screen()
-            print("asdfghj")
-            print("dfghjkl")
+
 
 def after_all(context):
     context.driver.quit()

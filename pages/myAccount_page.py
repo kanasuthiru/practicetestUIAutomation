@@ -40,15 +40,12 @@ class my_account(basePage):
         pass
 
     def verify_user_logged_in_successfully(self,username):
-        print(username)
+
         username=common.get_username_if_email(username)
-        print(username)
         self.wait_for_element(locator_type="xpath", locator_value="//div[@class='woocommerce-MyAccount-content']",
                               wait_action="visibility")
         my_account_after_login_text = f"""Hello {username} (not {username}? Sign out)\nFrom your account dashboard you can view your recent orders, manage your shipping and billing addresses and edit your password and account details."""
-        print(my_account_after_login_text)
         my_account_loggedin_user_text=self.get_element(locator_type="xpath",locator_value="//div[@class='woocommerce-MyAccount-content']",wait_action="visibility").text
-        print(my_account_after_login_text)
         assert my_account_loggedin_user_text.strip()==my_account_after_login_text.strip(),f"""text mismatch --- stored_variable value {my_account_after_login_text} --- ui text {my_account_loggedin_user_text}"""
 
 
@@ -69,13 +66,6 @@ class my_account(basePage):
         else:
             error_message_from_ui = self.get_element(locator_type="xpath",
                                                      locator_value="//ul[@class='woocommerce-error']/li").text
-        print("...................................................................")
-        print(reason)
-        print(component)
-        print(error_message_from_ui)
-        print("sdfghjkl")
-        print(".......................................................................")
-
         error_message_text=common.get_login_failure_reason(context,reason,component)
         assert error_message_text==error_message_from_ui,f" text mismatch ---error_message_text- {error_message_text}--error_message_from_ui--{error_message_from_ui}"
 

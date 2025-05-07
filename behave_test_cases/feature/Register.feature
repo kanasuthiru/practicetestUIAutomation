@@ -1,6 +1,6 @@
 Feature: Register to Automation Practice Site
 
-  @positive_scenario
+  @positive
   Scenario Outline:validate user is able to Register an Account
     Given user is on home screen page
     When user clicks on My Account menu
@@ -11,7 +11,7 @@ Feature: Register to Automation Practice Site
       | UserName |Password|
       |   random | random|
 
-  @new_negative_scenario
+  @negative
   Scenario Outline:validate user should not be allowed to register with invalid email_id
     Given user is on home screen page
     When user clicks on My Account menu
@@ -29,7 +29,7 @@ Feature: Register to Automation Practice Site
       |username@ex!ample.com	|random  |
       |   abc@ggg..com          |random  |
 
-
+  @negative
   Scenario Outline:validate user should not be allowed to register without email address
     Given user is on home screen page
     When user clicks on My Account menu
@@ -37,10 +37,11 @@ Feature: Register to Automation Practice Site
     And clicks on the Register button
     Then Registration must fail with a warning message "empty_email_address"
     Examples:
-      |Password|
+      |password|
       | random|
 
-    Scenario Outline:validate user should not be allowed to register without email address
+  @negative
+  Scenario Outline:validate user should not be allowed to register without email address
     Given user is on home screen page
     When user clicks on My Account menu
     And enters "<email_address>" into register email address field
@@ -50,7 +51,8 @@ Feature: Register to Automation Practice Site
       |email_address|
       | random|
 
-    Scenario:validate user should not be allowed to register without email address
+   @negative
+  Scenario:validate user should not be allowed to register without email address
     Given user is on home screen page
     When user clicks on My Account menu
     And clicks on the Register button

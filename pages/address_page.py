@@ -18,11 +18,11 @@ class Address_page(basePage):
         if b_address_exist==False:
             assert self.get_element(locator_value="//h3[text()='Billing Address']/../../address",locator_type="xpath").text.strip()=="You have not set up this type of address yet."
         else:
-            print("fghjk")
+            print("no code")
         if s_address_exist==False:
             assert self.get_element(locator_value="//h3[text()='Shipping Address']/../../address",locator_type="xpath").text.strip()=="You have not set up this type of address yet."
         else:
-            print("jsjdsjh")
+            print("no code")
 
     def click_on_billing_address_edit_link(self):
         current_page_url = self.driver.current_url
