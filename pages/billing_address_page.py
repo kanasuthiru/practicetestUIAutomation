@@ -1,0 +1,291 @@
+import os
+import random
+import string
+import time
+
+from faker import Faker
+from base.basepage import basePage
+from pages.myAccount_page import my_account
+from utils.common import convert_dictionary_values_to_string
+
+
+class billing_address(basePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.before_edit_billing_address = {}
+        self.after_edit_billing_address={}
+        self.faker=Faker()
+
+    def verify_components_on_billing_address_page(self):
+        time.sleep(10)
+        self.is_billing_first_name_field_visible()
+        self.is_billing_last_name_field_visible()
+        self.is_billing_company_field_visible()
+        self.is_billing_email_field_visible()
+        self.is_billing_phone_field_visible()
+        self._is_billing_country_field_visible()
+        self._is_billing_address_1_field_visible()
+        self._is_billing_address_2_field_visible()
+        self._is_billing_city_field_visible()
+        self._is_billing_state_field_visible()
+        self._is_billing_postcode_field_visible()
+        self._is_billing_save_address_button_visible()
+
+        return self.before_edit_billing_address
+
+
+    def click_on_save_address_button(self):
+        self.click_element(locator_value="//input[@name='save_address' and @class='button']",locator_type="xpath")
+
+
+    def verify_saved_address(self,current_page_url,address_dict):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="//input[@name='save_address' and @class='button']",
+                                                      locatorType="xpath", status_flag=False)
+        self.wait_until_url_change(current_page_url)
+        assert self.driver.current_url == f"""{os.getenv("web_page_url")}my-account/"""
+
+        assert "Address changed successfully." == self.get_element(locator_type="xpath",
+                                                                   locator_value="//div[@class='woocommerce-message']",wait_action="visibility").text.strip()
+        my_account(self.driver).click_on_address_link_from_my_account_menu()
+        saved_address=self.get_element(locator_value="//h3[text()='Billing Address']/../../address", locator_type="xpath").text
+        print(saved_address==convert_dictionary_values_to_string(address_dict))
+        print(convert_dictionary_values_to_string(address_dict))
+        print(saved_address)
+        assert saved_address==convert_dictionary_values_to_string(address_dict)
+
+
+
+    def enter_billing_first_name(self,f_name=None):
+        if f_name is not None:
+            if f_name=="random":
+                f_name=self.faker.first_name()
+            self.send_text(text=f_name, locator_value="billing_first_name", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value",locator_value="billing_first_name",locator_type="id").strip()==f_name
+        self.after_edit_billing_address['f_name']=f_name
+
+    def  enter_billing_last_name(self,l_name=None):
+        if l_name is not None:
+            if l_name=="random":
+                l_name=self.faker.last_name()
+            self.send_text(text=l_name, locator_value="billing_last_name", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value",locator_value="billing_last_name",locator_type="id").strip()==l_name
+        self.after_edit_billing_address['l_name'] = l_name
+
+    def enter_billing_company_name(self,c_name=None):
+        if c_name is not None:
+            if c_name=="random":
+                c_name=self.faker.company()
+            self.send_text(text=c_name, locator_value="billing_company", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_company", locator_type="id").strip()==c_name
+        self.after_edit_billing_address['c_name'] = c_name
+
+    def enter_billing_email_address(self,email_address=None,user_mail_address=None):
+        if email_address is not None:
+             assert self.get_attribute_value(attribute_name="value", locator_value="billing_email", locator_type="id").strip()==user_mail_address
+        else:
+            self.get_element(locator_value="billing_email",locator_type="id").clear()
+
+        self.after_edit_billing_address['email_address'] = email_address
+
+
+    def enter_billing_phone_number(self,phone_number=None):
+        if phone_number is not None:
+            if phone_number=="random":
+                phone_number=random.randint(9000000000,9999999999)
+                print(phone_number)
+                print("pho.........................................................................")
+            self.send_text(text=phone_number, locator_value="billing_phone", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_phone", locator_type="id").strip()==str(phone_number)
+        self.after_edit_billing_address['phone_number'] = phone_number
+
+    def select_country_from_the_dropdown(self,country):
+        pass
+
+    def enter_billing_street_address(self,street_address=None):
+        if street_address is not None:
+            if street_address=="random":
+                street_address=self.faker.street_address()
+            self.send_text(text=street_address, locator_value="billing_address_1", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_address_1", locator_type="id").strip()==street_address
+        self.after_edit_billing_address['street_address'] = street_address
+
+    def enter_billing_optional_address(self,address_2=None):
+        if address_2 is not None:
+            if address_2=="random":
+                address_2="some_new address"
+            self.send_text(text=address_2, locator_value="billing_address_2", locator_type="id")
+            print(self.get_attribute_value(attribute_name="value", locator_value="billing_address_2", locator_type="id").strip(),"......",address_2,"..............")
+            print(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_address_2", locator_type="id").strip()==address_2.strip()
+        self.after_edit_billing_address['address_2'] = address_2
+
+    def enter_billing_city_or_town(self,city_name):
+        if city_name is not None:
+            if city_name=="random":
+                city_name="random city"
+            self.send_text(text=city_name, locator_value="billing_city", locator_type="id")
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_city", locator_type="id").strip()==city_name
+        self.after_edit_billing_address['city_name'] = city_name
+
+    def select_billing_state_or_county_from_the_dropdown(self,state_name):
+        state_name_text=self.get_element(locator_value="select2-chosen-2",locator_type="id").text
+        print(state_name_text)
+        print(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+        self.after_edit_billing_address['state'] = state_name_text
+
+    def enter_billing_pincode(self,pincode=None):
+        if pincode is not None:
+            if pincode=="random":
+                pincode=random.randint(111111,999999)
+                print(pincode)
+            self.send_text(text=pincode, locator_value="billing_postcode", locator_type="id")
+            print(self.get_attribute_value(attribute_name="value", locator_value="billing_postcode", locator_type="id"),pincode)
+            assert self.get_attribute_value(attribute_name="value", locator_value="billing_postcode", locator_type="id").strip()==f"{pincode}".strip()
+        self.after_edit_billing_address['pincode'] = pincode
+        print(self.after_edit_billing_address)
+        print("asdfghjkwertyuiosdfghjk.................................................")
+
+
+    def is_billing_first_name_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_first_name_field",locatorType="id")
+        f_name=self.get_attribute_value(attribute_name="value",locator_value="billing_first_name",locator_type="id")
+        self.before_edit_billing_address['f_name']=f_name
+        print("First Name",self.get_element(locator_value="//p[@id='billing_first_name_field']/label",locator_type="xpath").text.strip())
+        assert "First Name *"==self.get_element(locator_value="//p[@id='billing_first_name_field']/label",locator_type="xpath").text.strip()
+
+    def is_billing_last_name_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_last_name_field",locatorType="id")
+        l_name=self.get_attribute_value(attribute_name="value",locator_value="billing_last_name",locator_type="id")
+        self.before_edit_billing_address['l_name']=l_name
+        print("Last Name",self.get_element(locator_value="//p[@id='billing_last_name_field']/label",locator_type="xpath").text.strip())
+        assert "Last Name *"==self.get_element(locator_value="//p[@id='billing_last_name_field']/label",locator_type="xpath").text.strip()
+
+    def is_billing_company_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_company_field",locatorType="id")
+        c_name=self.get_attribute_value(attribute_name="value",locator_value="billing_company",locator_type="id")
+        self.before_edit_billing_address['c_name']=c_name
+        print("Company Name",self.get_element(locator_value="//p[@id='billing_company_field']/label",locator_type="xpath").text.strip())
+        assert "Company Name"==self.get_element(locator_value="//p[@id='billing_company_field']/label",locator_type="xpath").text.strip()
+
+
+    def is_billing_email_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_email_field",locatorType="id")
+        email_address=self.get_attribute_value(attribute_name="value",locator_value="billing_email",locator_type="id")
+        self.before_edit_billing_address['email_address']=email_address
+        print("Email Address",self.get_element(locator_value="//p[@id='billing_email_field']/label",locator_type="xpath").text.strip())
+        assert "Email Address *"==self.get_element(locator_value="//p[@id='billing_email_field']/label",locator_type="xpath").text.strip()
+
+
+    def is_billing_phone_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_phone_field",locatorType="id")
+        phone_number=self.get_attribute_value(attribute_name="value",locator_value="billing_phone",locator_type="id")
+        self.before_edit_billing_address['phone_number']=phone_number
+        print("Phone",self.get_element(locator_value="//p[@id='billing_phone_field']/label",locator_type="xpath").text.strip())
+        assert "Phone *"==self.get_element(locator_value="//p[@id='billing_phone_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_country_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_country_field",locatorType="id")
+        selected_country = self.get_attribute_value(attribute_name="value", locator_value="select2-chosen-1",
+                                                  locator_type="id")
+        self.before_edit_billing_address["country"] = selected_country
+        print("Country *",self.get_element(locator_value="//p[@id='billing_country_field']/label",locator_type="xpath").text.strip())
+        assert "Country *"==self.get_element(locator_value="//p[@id='billing_country_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_address_1_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_address_1_field",locatorType="id")
+        address=self.get_attribute_value(attribute_name="value",locator_value="billing_address_1",locator_type="id")
+        self.before_edit_billing_address['street_address']=address
+        print("Address",self.get_element(locator_value="//p[@id='billing_address_1_field']/label",locator_type="xpath").text.strip())
+        assert "Address *"==self.get_element(locator_value="//p[@id='billing_address_1_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_address_2_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_address_2_field",locatorType="id")
+        optional_address=self.get_attribute_value(attribute_name="value",locator_value="billing_address_2",locator_type="id")
+        self.before_edit_billing_address["address_2"]=optional_address
+        print(optional_address)
+
+
+
+    def _is_billing_city_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_city_field",locatorType="id")
+        city=self.get_attribute_value(attribute_name="value",locator_value="billing_city",locator_type="id")
+        self.before_edit_billing_address["city"]=city
+        print("Town / City",self.get_element(locator_value="//p[@id='billing_city_field']/label",locator_type="xpath").text.strip())
+        assert "Town / City *"==self.get_element(locator_value="//p[@id='billing_city_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_state_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_state_field",locatorType="id")
+        selected_state=self.get_attribute_value(attribute_name="value",locator_value="select2-chosen-2",locator_type="id")
+
+        self.before_edit_billing_address["state"]=selected_state
+        print("State / County",self.get_element(locator_value="//p[@id='billing_state_field']/label",locator_type="xpath").text.strip())
+        assert "State / County *"==self.get_element(locator_value="//p[@id='billing_state_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_postcode_field_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="billing_postcode_field",locatorType="id")
+        input_text=self.get_attribute_value(attribute_name="value",locator_value="billing_postcode",locator_type="id")
+        self.before_edit_billing_address["pincode"]=input_text
+        print("Postcode / ZIP",self.get_element(locator_value="//p[@id='billing_postcode_field']/label",locator_type="xpath").text.strip())
+        assert "Postcode / ZIP *"==self.get_element(locator_value="//p[@id='billing_postcode_field']/label",locator_type="xpath").text.strip()
+
+
+    def _is_billing_save_address_button_visible(self):
+        self.check_for_ele_displayed_or_not_displayed(locatorValue="//input[@name='save_address' and @class='button']",locatorType="xpath")
+
+
+
+    def enter_only_billing_address_details(self,address_dict,user_email_address):
+        self.fields=address_dict.keys()
+        self.enter_billing_first_name(address_dict.get('f_name'))
+        self.enter_billing_last_name(address_dict.get(f'l_name'))
+        self.enter_billing_company_name(address_dict.get('c_name'))
+        self.enter_billing_email_address(address_dict.get("email_address"),user_email_address)
+        self.enter_billing_phone_number(address_dict.get('phone_number'))
+        self.select_country_from_the_dropdown(address_dict.get('country'))
+        self.enter_billing_street_address(address_dict.get('street_address'))
+        self.enter_billing_optional_address(address_dict.get('address_2'))
+        self.enter_billing_city_or_town(address_dict.get('city'))
+        self.select_billing_state_or_county_from_the_dropdown(address_dict.get('state'))
+        self.enter_billing_pincode(address_dict.get('pincode'))
+        fields_not_filled=[field for field, value in self.after_edit_billing_address.items() if value is None]
+        print(fields_not_filled)
+        print("dfghjk........................")
+        current_url_page=self.driver.current_url
+        self.click_on_save_address_button()
+        if fields_not_filled:
+            assert self.driver.current_url==current_url_page
+            self.verify_error_message(fields_not_filled)
+            return self.after_edit_billing_address
+
+        else:
+            self.verify_saved_address(current_page_url=current_url_page,address_dict=self.after_edit_billing_address)
+            return self.after_edit_billing_address
+
+
+
+
+    def verify_error_message(self,expected_fields):
+
+        text_mapping = {"f_name": "First Name", "l_name": "Last Name", "email_address": "Email Address",
+                        "ph_number":"Phone","street_address": "Address", "city_name": "Town / City", "pincode": "Postcode / ZIP"}
+        expected_fields = [field for field in expected_fields if field in text_mapping.keys()]
+
+        error_eles=self.getAllElements(locatorValue="//ul[@class='woocommerce-error']/li",locator_type="xpath")
+        for index ,error_msg in enumerate(error_eles):
+            print(error_msg.text)
+            print("..........................")
+            if expected_fields[index] in text_mapping.keys():
+                print(f"{text_mapping[expected_fields[index]]} is a required field.")
+                assert error_msg.text==f"{text_mapping[expected_fields[index]]} is a required field."
+
+
+
+
+
+
