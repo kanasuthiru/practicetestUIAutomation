@@ -51,7 +51,7 @@ After running tests, you can view the HTML report generated in the report.html f
 - **`pages/`**: Page object models for various pages in the app(address, basket, home, etc.).
 - **`pytest_testcases/`**: Contains the Pytest test cases for cart and address.
 - **`report.html`**: HTML report of test results.
-- also adds block using chrome extention
+- also adds block using chrome extension
 
 ---
 
