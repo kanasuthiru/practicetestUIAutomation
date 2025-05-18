@@ -1,6 +1,6 @@
 Feature: Login to Automation Practice Site
 
-  @positive
+  @positivenew
   Scenario Outline:validate user is able to login with Valid Credentials
     Given user is on home screen page
     When user clicks on My Account menu
@@ -9,7 +9,7 @@ Feature: Login to Automation Practice Site
     Then User("<UserName>") should successfully login to the web page
     Examples:
       | UserName |Password|
-      |    map |   Kanasu!58|
+      |    map |   Kanasu!5|
 
  @negative
   Scenario Outline:validate user is not able to login with invalid Username

@@ -1,6 +1,9 @@
 from behave.model import Scenario
 from behave.model_core import Status
 from selenium import webdriver
+import allure
+from behave.model import Status
+
 
 from base.basepage import basePage
 from conftest import shop_page
@@ -29,12 +32,17 @@ def before_scenario(context,scenario):
     context.email_address=None
 
 def after_scenario(context, scenario):
+    if scenario.status == Status.failed:
+        screenshot = context.driver.get_screenshot_as_png()
+        allure.attach(screenshot, name="Screenshot", attachment_type=allure.attachment_type.PNG)
     scenario_name=scenario.name.split(" -- ")[0]
     if scenario_name in ["validate user is able to login with Valid Credentials","validate user is able to Register an Account"]:
         if context.bp.get_element(locator_type="xpath", locator_value="//div[@class='woocommerce-MyAccount-content']",
                               wait_action="visibility").is_displayed():
             context.myAcc.click_on_sign_out_link()
             context.myAcc.verify_user_is_on_login_screen()
+
+
 
 
 def after_all(context):

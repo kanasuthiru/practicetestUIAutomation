@@ -1,37 +1,46 @@
-from argparse import Action
 from time import sleep
-
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.common import ElementNotVisibleException, NoSuchElementException, ElementNotSelectableException, \
-    StaleElementReferenceException
-from selenium.webdriver.support.expected_conditions import element_to_be_clickable
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import (
+    ElementNotVisibleException, NoSuchElementException,
+    ElementNotSelectableException, StaleElementReferenceException
+)
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import logging
+
+from utils.logger import setup_logging
+
 
 class basePage:
     def __init__(self,driver):
         self.driver=driver
 
+
+    # Get the root logger (or you can create/get a named logger)
+
     def wait_for_element(self, locator_value, locator_type, wait_action=None, time_out=5, scroll_to_view=True):
-        wait = WebDriverWait(self.driver, timeout=time_out, poll_frequency=.1,
-                             ignored_exceptions=[StaleElementReferenceException, ElementNotVisibleException,
-                                                 ElementNotSelectableException, NoSuchElementException])
-        locator_type=self.get_locator_type(locator_type)
-        element=None
-        if wait_action=="clickable":
-            element = wait.until(EC.element_to_be_clickable((locator_type, locator_value)))
-        elif    wait_action=="visibility":
-            element= wait.until(EC.visibility_of_element_located((locator_type,locator_value)))
-        elif wait_action=="invisibility":
-            element=wait.until(EC.invisibility_of_element((locator_type,locator_value)))
-        elif  wait_action is None:
-            element=self.driver.find_element(locator_type,locator_value)
-
-            sleep(.5)
-
-
-        return element
+        try:
+            wait = WebDriverWait(self.driver, timeout=time_out, poll_frequency=.1,
+                                 ignored_exceptions=[StaleElementReferenceException, ElementNotVisibleException,
+                                                     ElementNotSelectableException, NoSuchElementException])
+            locator_type = self.get_locator_type(locator_type)
+            element = None
+            if wait_action=="clickable":
+                element = wait.until(EC.element_to_be_clickable((locator_type, locator_value)))
+            elif    wait_action=="visibility":
+                element= wait.until(EC.visibility_of_element_located((locator_type,locator_value)))
+            elif wait_action=="invisibility":
+                element=wait.until(EC.invisibility_of_element((locator_type,locator_value)))
+            elif  wait_action is None:
+                element=self.driver.find_element(locator_type,locator_value)
+                sleep(.5)
+            return element
+        except Exception as e:
+            setup_logging().error("wait_for_element failed.")
+            setup_logging().error(f"Locator: {locator_type}='{locator_value}', Action: {wait_action}")
+            setup_logging().exception(e)
+        assert  False
 
 
     def get_element(self,locator_value,locator_type,wait_action=None,timeout=5):

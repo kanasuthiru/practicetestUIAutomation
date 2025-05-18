@@ -21,8 +21,8 @@ class Login:
 
     @when(u'enters registered "{UserName}" and valid "{Password}"')
     def step_impl(context,UserName,Password):
-        context.myAcc.enter_login_user_name(context,UserName)
-        context.myAcc.enter_login_password(context,Password)
+        context.myAcc.enter_login_user_name(UserName)
+        context.myAcc.enter_login_password(Password)
 
 
     @when(u'clicks on the login button')
