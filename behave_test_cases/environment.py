@@ -3,7 +3,7 @@ from behave.model_core import Status
 from selenium import webdriver
 import allure
 from behave.model import Status
-
+from selenium.webdriver.chrome.options import Options
 
 from base.basepage import basePage
 from conftest import shop_page
@@ -13,10 +13,13 @@ from pages.home_page import home_page
 from pages.myAccount_page import my_account
 from pages.shipping_address_page import shipping_address
 from pages.shop_page import shop
-
+import tempfile
 
 def before_all(context):
-    context.driver = webdriver.Chrome()
+    options = Options()
+    # Create a unique temporary directory for Chrome user data
+    options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+    context.driver = webdriver.Chrome(options=options)
     context.driver.maximize_window()
 
 
