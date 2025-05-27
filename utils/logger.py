@@ -28,13 +28,13 @@ try:
 except FileNotFoundError:
     base_path = current_dir  # fallback
 
-log_file_path = os.path.join(base_path, 'error.log')
+LOG_PATH = os.path.join(base_path, 'error.log')
 
 
 
 
 # Ensure directory exists
-os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
 
 # Clear existing handlers
 for handler in logging.root.handlers[:]:
