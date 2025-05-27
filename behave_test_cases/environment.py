@@ -1,3 +1,5 @@
+import logging
+
 from behave.model import Scenario
 from behave.model_core import Status
 from selenium import webdriver
@@ -18,7 +20,9 @@ import tempfile
 def before_all(context):
     options = Options()
     # Create a unique temporary directory for Chrome user data
+    options.add_argument("--headless")
     temp_user_data_dir = tempfile.mkdtemp(prefix="chrome_user_data_")
+    logging.info(f"Using Chrome user data dir: {temp_user_data_dir}")
     options.add_argument(f"--user-data-dir={temp_user_data_dir}")
     context.driver = webdriver.Chrome(options=options)
     context.driver.maximize_window()
