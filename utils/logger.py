@@ -2,7 +2,6 @@
 import logging
 import os
 
-LOG_PATH = '/home/thriveni/Assignment/practiceAutomation/error.log'
 
 
 import os
