@@ -16,13 +16,20 @@ from pages.shipping_address_page import shipping_address
 from pages.shop_page import shop
 from selenium.webdriver.chrome.options import Options
 load_dotenv()
+import os
+
 
 @pytest.fixture(scope="session")
 def driver():
     print("\n[Setup] Launching browser for the entire test suite")  # Optional: run in background
 
-    extension_path = '/home/thriveni/Desktop/my-extension.crx'
+    # extension_path = '/home/thriveni/Desktop/my-extension.crx'
 
+    # Get the base directory of your project (assuming this file is somewhere inside)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Adjust the number of os.path.dirname() calls to go up to your project root
+
+    extension_path = os.path.join(base_dir, 'my-extension.crx')
     # Set up Chrome options to load the extension
     chrome_options = Options()
     chrome_options.add_extension(extension_path)
