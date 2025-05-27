@@ -25,11 +25,22 @@ def driver():
 
     # extension_path = '/home/thriveni/Desktop/my-extension.crx'
 
-    # Get the base directory of your project (assuming this file is somewhere inside)
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # Adjust the number of os.path.dirname() calls to go up to your project root
+    # Get the directory of the current file (for example, your test file or config file)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    extension_path = os.path.join(base_dir, 'my-extension.crx')
+    # If your extension is inside your project folder, say in a folder called 'extensions'
+    extension_path = os.path.join(current_dir, '..', 'extensions', 'my-extension.crx')
+
+    # Normalize the path
+    extension_path = os.path.normpath(extension_path)
+
+    # Debug: print the path to verify
+    print("Extension path:", extension_path)
+
+    # Optional: check if file exists
+    if not os.path.exists(extension_path):
+        raise FileNotFoundError(f"Extension file not found at: {extension_path}")
+
     # Set up Chrome options to load the extension
     chrome_options = Options()
     chrome_options.add_extension(extension_path)
@@ -102,4 +113,5 @@ def basket_page(driver):
 @pytest.fixture(scope="function")
 def homepage(driver):
     page = home_page(driver)
-    return page
+    return
+
