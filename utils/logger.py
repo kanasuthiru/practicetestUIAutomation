@@ -4,8 +4,38 @@ import os
 
 LOG_PATH = '/home/thriveni/Assignment/practiceAutomation/error.log'
 
+
+import os
+import logging
+
+# Get current file's directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Assume 'practiceAutomation' is a folder somewhere up in the hierarchy
+# Let's find the base folder dynamically by searching upwards
+
+def find_base_dir(target_folder_name):
+    path = current_dir
+    while True:
+        if os.path.basename(path) == target_folder_name:
+            return path
+        parent = os.path.dirname(path)
+        if parent == path:  # reached root directory
+            raise FileNotFoundError(f"Folder '{target_folder_name}' not found in path hierarchy.")
+        path = parent
+
+try:
+    base_path = find_base_dir('practiceAutomation')
+except FileNotFoundError:
+    base_path = current_dir  # fallback
+
+log_file_path = os.path.join(base_path, 'error.log')
+
+
+
+
 # Ensure directory exists
-os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
 # Clear existing handlers
 for handler in logging.root.handlers[:]:
